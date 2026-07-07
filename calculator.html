@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eSewa Fee Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6;
+            padding: 20px;
+            text-align: center;
+        }
+        .calc-box {
+            max-width: 400px;
+            background: white;
+            margin: 30px auto;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        h2 { color: #27ae60; }
+        input {
+            width: 90%;
+            padding: 12px;
+            margin: 15px 0;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        button {
+            width: 95%;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover { background-color: #219653; }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e8f8f5;
+            border-radius: 6px;
+            text-align: left;
+            font-size: 15px;
+            display: none; 
+        }
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            color: #555;
+            text-decoration: none;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="calc-box">
+    <h2>🛠️ eSewa Fee Calculator</h2>
+    <p>Send garna khojeko rakam (Amount) halnuhos:</p>
+    
+    <input type="number" id="amountInput" placeholder="Enter Amount (Rs.)">
+    <button onclick="calculateFee()">Calculate Charge</button>
+
+    <div class="result" id="resultBox">
+        <p><strong>Transfer Amount:</strong> Rs. <span id="resAmount">0</span></p>
+        <p><strong>eSewa Service Charge:</strong> Rs. <span id="resCharge">0</span></p>
+        <p style="color: #c0392b;"><strong>Total Cost:</strong> Rs. <span id="resTotal">0</span></p>
+    </div>
+
+    <a href="index.html" class="back-btn">← Back to Home</a>
+</div>
+
+<script>
+    function calculateFee() {
+        let amount = parseFloat(document.getElementById('amountInput').value);
+        let charge = 0;
+
+        if (isNaN(amount) || amount <= 0) {
+            alert("Please enter a valid amount!");
+            return;
+        }
+
+        if (amount <= 100) {
+            charge = 0; 
+        } else if (amount <= 1000) {
+            charge = 5; 
+        } else if (amount <= 5000) {
+            charge = 10; 
+        } else {
+            charge = 20; 
+        }
+
+        let total = amount + charge;
+
+        document.getElementById('resAmount').innerText = amount;
+        document.getElementById('resCharge').innerText = charge;
+        document.getElementById('resTotal').innerText = total;
+        
+        document.getElementById('resultBox').style.display = 'block';
+    }
+</script>
+
+</body>
+</html>
