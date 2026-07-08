@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IQ Quiz Game</title>
+    <title>IQ Quiz Game with Earnings</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -19,7 +19,20 @@
             border-radius: 12px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-        h2 { color: #2980b9; }
+        h2 { color: #2980b9; margin-bottom: 5px; }
+        
+        /* Coin Dashboard Style */
+        .coin-dashboard {
+            background: #f1c40f;
+            color: #2c3e50;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+        
         .question {
             font-size: 18px;
             font-weight: bold;
@@ -48,9 +61,8 @@
         }
         .score-area {
             margin-top: 20px;
-            font-size: 16px;
-            font-weight: bold;
-            color: #27ae60;
+            font-size: 14px;
+            color: #7f8c8d;
         }
         .back-btn {
             display: inline-block;
@@ -65,6 +77,11 @@
 
 <div class="quiz-box">
     <h2>🎮 Mind Games & Quiz</h2>
+    
+    <!-- Total Coins Display -->
+    <div class="coin-dashboard">
+        🪙 My Total Balance: <span id="totalCoins">0</span> Coins
+    </div>
     <hr>
     
     <!-- Question Display -->
@@ -77,16 +94,15 @@
         <button class="opt-btn" onclick="checkAnswer(2)" id="opt2">Option 3</button>
     </div>
 
-    <!-- Score Board -->
+    <!-- Current Round Score -->
     <div class="score-area">
-        Score: <span id="scoreDisplay">0</span> / 3
+        Current Round: <span id="scoreDisplay">0</span> / 3 Correct
     </div>
 
     <a href="index.html" class="back-btn">← Back to Home</a>
 </div>
 
 <script>
-    // Quiz Questions Data (Array of Objects)
     const quizData = [
         {
             question: "1. Nepal ko sabai bhanda thulo pradesh kun ho?",
@@ -106,9 +122,14 @@
     ];
 
     let currentQuestionIndex = 0;
-    let score = 0;
+    let currentScore = 0;
+    
+    // Mobile storage bata purano coin load garne (yadi chhaina bhane 0 hunchha)
+    let totalCoins = parseInt(localStorage.getItem('userCoins')) || 0;
 
-    // Function to load questions dynamically
+    // Display coin balance on screen load
+    document.getElementById('totalCoins').innerText = totalCoins;
+
     function loadQuestion() {
         if (currentQuestionIndex < quizData.length) {
             let currentQuiz = quizData[currentQuestionIndex];
@@ -117,31 +138,39 @@
             document.getElementById('opt1').innerText = currentQuiz.options[1];
             document.getElementById('opt2').innerText = currentQuiz.options[2];
         } else {
-            // Game Over Screen
-            document.getElementById('qText').innerHTML = "🎉 Quiz Complete! <br> Tapaile sabai question khelisakhnu bhayo.";
+            document.getElementById('qText').innerHTML = "🎉 Quiz Complete!<br>Sahi uttar ko Coins tapai ko account ma thapiyo.";
             document.querySelector('.options').style.display = 'none';
         }
     }
 
-    // Function to check answer logic
     function checkAnswer(selectedIndex) {
         let correctIndex = quizData[currentQuestionIndex].correct;
         
         if (selectedIndex === correctIndex) {
-            score++;
-            document.getElementById('scoreDisplay').innerText = score;
-            alert("Sahi uttar! 🎉");
+            currentScore++;
+            document.getElementById('scoreDisplay').innerText = currentScore;
+            
+            // Sahi uttar bhaye 10 coins thapne
+            totalCoins += 10;
+            
+            // Mobile memory (localStorage) ma permanent save garne
+            localStorage.setItem('userCoins', totalCoins);
+            
+            // Screen ma coin update garne
+            document.getElementById('totalCoins').innerText = totalCoins;
+            
+            alert("Sahi uttar! Tapaile +10 Coins kamaunu bhayo! 🎉");
         } else {
-            alert("Galti uttar! ❌");
+            alert("Galti uttar! ❌ Coins thapiyena.");
         }
 
         currentQuestionIndex++;
         loadQuestion();
     }
 
-    // Initialize first question on page load
     loadQuestion();
 </script>
 
 </body>
 </html>
+
